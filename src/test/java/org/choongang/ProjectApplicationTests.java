@@ -18,7 +18,8 @@ class ProjectApplicationTests {
 	private AuthoritiesRepository authoritiesRepository;
 
 	@Test
-	@Disabled //실행이 안되게 하는것
+	@Disabled
+		//실행이 안되게 하는것
 	void contextLoads() {
 		Member member = memberRepository.findByUserId("userId").orElse(null);
 
