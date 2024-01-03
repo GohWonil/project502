@@ -31,7 +31,10 @@
 
   <main>
     <aside th:replace="~{admin/outlines/_side::menus}"></aside>
-    <section layout:fragment="content"></main>
+    <section>
+      <nav th:replace="~{admin/outlines/_submenu::submenus}"></nav>
+      <section layout:fragment="content"></main>
+    </section>
 </body>
 
 </html>
