@@ -1,7 +1,6 @@
 package org.choongang.board.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.choongang.board.entities.BoardData;
 import org.choongang.board.repositories.BoardDataRepository;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
