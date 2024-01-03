@@ -18,7 +18,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     HttpSession session = request.getSession();
     MemberUtil.clearLoginData(session);
 
-    /* 회원 정보 조회 편의 구현*/
+    /* 회원 정보 조회 편의 구현 */
     MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal();
     Member member = memberInfo.getMember();
     session.setAttribute("member", member);

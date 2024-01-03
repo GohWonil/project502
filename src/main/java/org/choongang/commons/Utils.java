@@ -25,34 +25,32 @@ public class Utils {
     errorsBundle = ResourceBundle.getBundle("messages.errors");
   }
 
-  public boolean isMobile(){
-    //모바일 수동 전환 모드 체크
+  public boolean isMobile() {
+    // 모바일 수동 전환 모드 체크
     String device = (String)session.getAttribute("device");
-    if(StringUtils.hasText(device)){
+    if (StringUtils.hasText(device)) {
       return device.equals("MOBILE");
     }
 
-    //요청 헤더 : User-Agent
+    // 요청 헤더 : User-Agent
     String ua = request.getHeader("User-Agent");
 
     String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
 
     return ua.matches(pattern);
-//    boolean isMobile = ua.matches(pattern);
-//    return isMobile;
   }
 
-  public String tpl(String path){
+  public String tpl(String path) {
     String prefix = isMobile() ? "mobile/" : "front/";
 
     return prefix + path;
   }
 
-  public static String getMessage(String code, String type){
+  public static String getMessage(String code, String type) {
     type = StringUtils.hasText(type) ? type : "validations";
 
     ResourceBundle bundle = null;
-    if(type.equals("commons")){
+    if (type.equals("commons")) {
       bundle = commonsBundle;
     } else if (type.equals("errors")) {
       bundle = errorsBundle;
@@ -63,8 +61,7 @@ public class Utils {
     return bundle.getString(code);
   }
 
-  public static String getMessage(String code){
+  public static String getMessage(String code) {
     return getMessage(code, null);
   }
-
 }

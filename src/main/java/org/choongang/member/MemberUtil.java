@@ -11,20 +11,21 @@ public class MemberUtil {
 
   private final HttpSession session;
 
-  public boolean isLogin(){
+  public boolean isLogin() {
     return getMember() != null;
   }
-  public Member getMember(){
+
+  public Member getMember() {
     Member member = (Member) session.getAttribute("member");
 
     return member;
   }
-  public static void clearLoginData(HttpSession session){
+
+  public static void clearLoginData(HttpSession session) {
     session.removeAttribute("username");
     session.removeAttribute("NotBlank_username");
     session.removeAttribute("NotBlank_password");
     session.removeAttribute("Global_error");
-
-
   }
+
 }

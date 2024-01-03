@@ -4,13 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
-import org.choongang.member.service.Joinservice;
+import org.choongang.member.MemberUtil;
+import org.choongang.member.entities.Member;
+import org.choongang.member.service.JoinService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/member")
@@ -18,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController implements ExceptionProcessor {
 
   private final Utils utils;
-//  private final JoinValidator joinValidator;
-  private final Joinservice joinservice;
+  private final JoinService joinService;
+  private final MemberUtil memberUtil;
 
   @GetMapping("/join")
   public String join(@ModelAttribute RequestJoin form) {
@@ -27,19 +26,10 @@ public class MemberController implements ExceptionProcessor {
     return utils.tpl("member/join");
   }
 
-//  @ResponseBody
-//  @GetMapping("/info")
-//  public void info(){
-//    if(memberUtil.isLogin()){
-//      Member member = memberUtil.getMember();
-//    }
-//
-//  }
-
   @PostMapping("/join")
   public String joinPs(@Valid RequestJoin form, Errors errors) {
 
-    joinservice.process(form, errors);
+    joinService.process(form, errors);
 
     if (errors.hasErrors()) {
       return utils.tpl("member/join");
@@ -53,5 +43,43 @@ public class MemberController implements ExceptionProcessor {
   public String login() {
 
     return utils.tpl("member/login");
+  }
+  /*
+  @ResponseBody
+  @GetMapping("/info")
+  public void info(Principal principal) {
+      String username = principal.getName();
+      System.out.printf("username=%s%n", username);
+  }
+   */
+    /*
+    @ResponseBody
+    @GetMapping("/info")
+    public void info(@AuthenticationPrincipal MemberInfo memberInfo) {
+
+        System.out.println(memberInfo);
+    }
+    */
+    /*
+    @ResponseBody
+    @GetMapping("/info")
+    public void info() {
+        MemberInfo memberInfo = (MemberInfo)SecurityContextHolder
+                                    .getContext()
+                                    .getAuthentication()
+                                    .getPrincipal();
+
+        System.out.println(memberInfo);
+    }
+     */
+  @ResponseBody
+  @GetMapping("/info")
+  public void info() {
+    if (memberUtil.isLogin()) {
+      Member member = memberUtil.getMember();
+      System.out.println(member);
+    } else {
+      System.out.println("미로그인 상태...");
+    }
   }
 }

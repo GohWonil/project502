@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -23,7 +24,13 @@ public class SecurityConfig {
 //        .defaultSuccessUrl("/")
 //        .failureUrl("/member/login?error=true");
     });
-    /*  인증 설정 E - 로그인 */
+
+    http.logout(c -> {
+      c.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+          .logoutSuccessUrl("/member/login");
+    });
+    /* 인증 설정 E - 로그인, 로그아웃 */
+
     return http.build();
   }
 
