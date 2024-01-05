@@ -15,10 +15,6 @@ public class ThumbnailTest {
   @Test
   void getThumbTest() {
     String[] data = infoService.getThumb(302L, 250, 250);
-    if (data != null) {
-      System.out.println(Arrays.toString(data));
-    } else {
-      System.out.println("Thumbnail not available or failed to generate.");
-    }
+    System.out.println(Arrays.toString(data));
   }
 }
