@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller("adminBoardController")
@@ -30,7 +31,8 @@ public class BoardController implements ExceptionProcessor {
    */
 
   @GetMapping
-  public String list(){
+  public String list(Model model) {
+    commonProcess("list", model);
 
     return "admin/board/list";
   }
@@ -46,9 +48,14 @@ public class BoardController implements ExceptionProcessor {
     return "admin/board/add";
   }
 
+  /**
+   * 게시판 등록/수정 처리
+   *
+   * @return
+   */
   @GetMapping("/save")
   public String save() {
-    return "admin/board/save";
+    return "redirect:/admin/board";
   }
 
   /**
@@ -75,7 +82,19 @@ public class BoardController implements ExceptionProcessor {
       pageTitle = "게시글 관리";
     }
 
+    List<String> addCommonScript = new ArrayList<>();
+    List<String> addScript = new ArrayList<>();
+
+    if (mode.equals("add") || mode.equals("edit")) { // 게시판 등록 또는 수정(ckeditor5 사용)
+      addCommonScript.add("ckeditor5/ckeditor");
+      addScript.add("board/form");
+    }
+
+    model.addAttribute("addCommonScript", addCommonScript);
+    model.addAttribute("addScript", addScript);
+
     model.addAttribute("pageTitle", pageTitle);
+    model.addAttribute("subMenuCode", mode);
   }
 
 }
