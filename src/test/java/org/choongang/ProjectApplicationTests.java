@@ -19,10 +19,9 @@ class ProjectApplicationTests {
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
 
-	@Test
-	@Disabled
+	@Test @Disabled
 	void contextLoads() {
-		Member member = memberRepository.findByUserId("userId").orElse(null);
+		Member member = memberRepository.findByUserId("user02").orElse(null);
 
 		Authorities authorities = new Authorities();
 		authorities.setMember(member);
