@@ -16,30 +16,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties(FileProperties.class)
 public class MvcConfig implements WebMvcConfigurer {
 
-  @Autowired
-  private FileProperties fileProperties;
+    @Autowired
+    private FileProperties fileProperties;
 
-  @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler(fileProperties.getUrl() + "**")
-        .addResourceLocations("file:///" + fileProperties.getPath());
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(fileProperties.getUrl() + "**")
+                .addResourceLocations("file:///" + fileProperties.getPath());
 
-    registry.addResourceHandler("/**")
-        .addResourceLocations("classpath:/static/");
-  }
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
+    }
 
-  @Bean
-  public MessageSource messageSource(){
-    ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
-    ms.setDefaultEncoding("UTF-8");
-    ms.setBasenames("messages.commons", "messages.validations", "messages.errors");
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
+        ms.setDefaultEncoding("UTF-8");
+        ms.setBasenames("messages.commons", "messages.validations", "messages.errors");
 
-    return ms;
-  }
+        return ms;
+    }
 
-  @Bean
-  public HiddenHttpMethodFilter hiddenHttpMethodFilter(){
-    return new HiddenHttpMethodFilter();
-  }
-
+    @Bean
+    public HiddenHttpMethodFilter httpMethodFilter() {
+        return new HiddenHttpMethodFilter();
+    }
 }

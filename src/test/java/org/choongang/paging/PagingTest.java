@@ -15,10 +15,10 @@ import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 public class PagingTest {
-
+    
     @Mock
     private HttpServletRequest request;
-
+    
     @Test
     @DisplayName("페이지 구간별 데이터 테스트")
     void pagingTest() {
@@ -31,12 +31,12 @@ public class PagingTest {
 
         assertEquals(totalPages, pagination.getTotalPages());
     }
-
+    
     @Test
     @DisplayName("페이징 쿼리스트링이 유지되는지 테스트")
     void pagingWithRequestTest() {
         given(request.getQueryString())
-            .willReturn("?orderStatus=CASH&userNm=name&page=3");
+                .willReturn("?orderStatus=CASH&userNm=name&page=3");
 
         Pagination pagination = new Pagination(23, 12345, 5, 20, request);
         List<String[]> data = pagination.getPages();

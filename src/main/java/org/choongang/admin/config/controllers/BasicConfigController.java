@@ -16,37 +16,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class BasicConfigController implements ExceptionProcessor {
 
-  private final ConfigSaveService saveService;
-  private final ConfigInfoService infoService;
+    private final ConfigSaveService saveService;
+    private final ConfigInfoService infoService;
 
-  @ModelAttribute("menuCode")
-  public String getMenuCode() {
-    return "config";
-  }
+    @ModelAttribute("menuCode")
+    public String getMenuCode() {
+        return "config";
+    }
 
-  @ModelAttribute("pageTitle")
+    @ModelAttribute("pageTitle")
+    public String getPageTitle() {
+        return "기본설정";
+    }
 
-  public String getPageTitle(){
-    return "기본설정";
-  }
+    @GetMapping
+    public String index(Model model) {
 
-  @GetMapping
-  public String index(Model model) {
+        BasicConfig config = infoService.get("basic", BasicConfig.class).orElseGet(BasicConfig::new);
 
-    BasicConfig config = infoService.get("basic", BasicConfig.class).orElseGet(BasicConfig::new);
+        model.addAttribute("basicConfig", config);
 
-    model.addAttribute("basicConfig", config);
+        return "admin/config/basic";
+    }
 
-    return "admin/config/basic";
-  }
+    @PostMapping
+    public String save(BasicConfig config, Model model) {
 
-  @PostMapping
-  public String save(BasicConfig config, Model model) {
+        saveService.save("basic", config);
 
-    saveService.save("basic", config);
+        model.addAttribute("message", "저장되었습니다.");
 
-    model.addAttribute("message", "저장되었습니다.");
-
-    return "admin/config/basic";
-  }
+        return "admin/config/basic";
+    }
 }

@@ -6,27 +6,31 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class RequestJoin {
-  @NotBlank
-  @Email
-  private String email;
 
-  @NotBlank
-  @Size(min = 6)
-  private String userId;
+    private String gid = UUID.randomUUID().toString();
 
-  @NotBlank
-  @Size(min = 8)
-  private String password;
+    @NotBlank @Email
+    private String email;
 
-  @NotBlank
-  private String confirmPassword;
+    @NotBlank
+    @Size(min=6)
+    private String userId;
 
-  @NotBlank
-  private String name;
+    @NotBlank
+    @Size(min=8)
+    private String password;
 
-  @AssertTrue
-  private boolean agree;
+    @NotBlank
+    private String confirmPassword;
+
+    @NotBlank
+    private String name;
+
+    @AssertTrue
+    private boolean agree;
 
 }

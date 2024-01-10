@@ -1,4 +1,4 @@
-package org.choongang.admin.confg;
+package org.choongang.admin.config;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.choongang.admin.config.controllers.BasicConfig;
