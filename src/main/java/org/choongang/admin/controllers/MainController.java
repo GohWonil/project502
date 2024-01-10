@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller("adminMainController")
 @RequestMapping("/admin")
 public class MainController implements ExceptionProcessor {
-  @GetMapping
-  public String index(){
-    return "admin/main/index";
-  }
 
+    @GetMapping
+    public String index() {
+        return "admin/main/index";
+    }
 }

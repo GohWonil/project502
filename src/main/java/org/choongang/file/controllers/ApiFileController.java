@@ -2,7 +2,7 @@ package org.choongang.file.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.choongang.commons.ExceptionRestProcessor;
-import org.choongang.commons.rest.JSONData;
+import org.choongang.commons.rests.JSONData;
 import org.choongang.file.entities.FileInfo;
 import org.choongang.file.service.FileDeleteService;
 import org.choongang.file.service.FileUploadService;
@@ -16,22 +16,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApiFileController implements ExceptionRestProcessor {
 
-  private final FileUploadService uploadService;
-  private final FileDeleteService deleteService;
+    private final FileUploadService uploadService;
+    private final FileDeleteService deleteService;
 
-  @PostMapping
-  public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
-                                         @RequestParam(name="gid", required = false) String gid,
-                                         @RequestParam(name="location", required = false) String location,
-                                         @RequestParam(name="imageOnly", required=false) boolean imageOnly) {
+    @PostMapping
+    public JSONData<List<FileInfo>> upload(@RequestParam("file") MultipartFile[] files,
+                                           @RequestParam(name="gid", required = false) String gid,
+                                           @RequestParam(name="location", required = false) String location,
+                                           @RequestParam(name="imageOnly", required=false) boolean imageOnly,
+                                           @RequestParam(name="singleFile", required = false) boolean singleFile) {
 
-    List<FileInfo> uploadedFiles = uploadService.upload(files, gid, location, imageOnly);
+        List<FileInfo> uploadedFiles = uploadService.upload(files, gid, location, imageOnly, singleFile);
 
-    return new JSONData<>(uploadedFiles);
-  }
+        return new JSONData<>(uploadedFiles);
+    }
 
-  @GetMapping("/{seq}")
-  public void delete(@PathVariable("seq") Long seq) {
-    deleteService.delete(seq);
-  }
+    @GetMapping("/{seq}")
+    public void delete(@PathVariable("seq") Long seq) {
+
+        deleteService.delete(seq);
+    }
 }

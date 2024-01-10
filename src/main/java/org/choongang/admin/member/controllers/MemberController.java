@@ -14,21 +14,22 @@ import java.util.List;
 @Controller("adminMemberController")
 @RequestMapping("/admin/member")
 public class MemberController implements ExceptionProcessor {
-  @ModelAttribute("menuCode")
-  public String getMenuCode(){
-    return "member";
-  }
-  @ModelAttribute("subMenus")
-  public List<MenuDetail> getSubMenus(){
 
-    return Menu.getMenus("member");
-  }
-  @GetMapping
-  public String list(Model model) {
+    @ModelAttribute("menuCode")
+    public String getMenuCode() {
+        return "member";
+    }
 
-    model.addAttribute("subMenuCode", "list");
-    return "admin/member/list";
-  }
+    @ModelAttribute("subMenus")
+    public List<MenuDetail> getSubMenus() {
 
+        return Menu.getMenus("member");
+    }
 
+    @GetMapping
+    public String list(Model model) {
+
+        model.addAttribute("subMenuCode", "list");
+        return "admin/member/list";
+    }
 }

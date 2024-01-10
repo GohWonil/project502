@@ -11,27 +11,26 @@ import java.util.UUID;
 @Data
 public class RequestJoin {
 
-  private String gid = UUID.randomUUID().toString();
+    private String gid = UUID.randomUUID().toString();
 
-  @NotBlank
-  @Email
-  private String email;
+    @NotBlank @Email
+    private String email;
 
-  @NotBlank
-  @Size(min = 6)
-  private String userId;
+    @NotBlank
+    @Size(min=6)
+    private String userId;
 
-  @NotBlank
-  @Size(min = 8)
-  private String password;
+    @NotBlank
+    @Size(min=8)
+    private String password;
 
-  @NotBlank
-  private String confirmPassword;
+    @NotBlank
+    private String confirmPassword;
 
-  @NotBlank
-  private String name;
+    @NotBlank
+    private String name;
 
-  @AssertTrue
-  private boolean agree;
+    @AssertTrue
+    private boolean agree;
 
 }
