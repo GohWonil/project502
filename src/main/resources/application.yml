@@ -5,7 +5,7 @@ spring:
   profiles:
     active: dev
 
-  # 파일 업로드 용량 설정
+  # 파일 업로드 설정
   servlet:
     multipart:
       maxFileSize: 20MB
@@ -27,7 +27,7 @@ spring:
         use_sql_comments: true
         dialect: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddlAuto: create
+      ddlAuto: update
 
   # 타임리프 설정
   thymeleaf:
@@ -53,9 +53,9 @@ logging:
           descriptor:
             sql: trace
 
-
-# 파일 업로드 경로 설정
+# 파일 경로 설정
 file:
   upload:
     path: C:/uploads/
     url: /uploads/
+

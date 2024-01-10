@@ -15,7 +15,7 @@ public class Member extends Base {
     @Id @GeneratedValue
     private Long seq;
 
-    @Column(length=65, nullable = false)
+    @Column(length = 65, nullable = false)
     private String gid;
 
     @Column(length=80, nullable = false, unique = true)
@@ -34,6 +34,12 @@ public class Member extends Base {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Authorities> authorities = new ArrayList<>();
 
+//    @Transient
+//    private String profileImagePath;
+//    @Transient
+//    private String profileImageUrl;
+
+    //위에 2개는 아래 하나에 다 포함 되있기 떄문에 삭제
     @Transient
     private FileInfo profileImage;
 }

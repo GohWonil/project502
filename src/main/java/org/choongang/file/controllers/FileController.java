@@ -19,27 +19,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class FileController implements ExceptionProcessor {
 
-    private final FileDeleteService deleteService;
-    private final FileDownloadService downloadService;
+  private final FileDeleteService deleteService;
+  private final FileDownloadService downloadService;
 
-    @GetMapping("/delete/{seq}")
-    public String delete(@PathVariable("seq") Long seq, Model model) {
+  @GetMapping("/upload")
+  public String upload() {
 
-        deleteService.delete(seq);
+    return "upload";
+  }
 
-        String script = String.format("if (typeof parent.callbackFileDelete == 'function') parent.callbackFileDelete(%d);", seq);
-        model.addAttribute("script", script);
+  @GetMapping("/delete/{seq}")
+  public String delete(@PathVariable("seq") Long seq, Model model) {
 
-        return "common/_execute_script";
+    deleteService.delete(seq);
+
+    String script = String.format("if (typeof parent.callbackFileDelete == 'function') parent.callbackFileDelete(%d);", seq);
+    model.addAttribute("script", script);
+
+    return "common/_execute_script";
+  }
+
+  @ResponseBody
+  @RequestMapping("/download/{seq}")
+  public void download(@PathVariable("seq") Long seq) {
+    try {
+      downloadService.download(seq);
+
+    } catch (CommonException e){
+      throw new AlertBackException(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-
-    @ResponseBody
-    @RequestMapping("/download/{seq}")
-    public void download(@PathVariable("seq") Long seq) {
-        try {
-            downloadService.download(seq);
-        } catch (CommonException e) {
-            throw new AlertBackException(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
+  }
 }
