@@ -1,114 +1,40 @@
-package org.choongang.admin.board;
+package org.choongang.board.controllers;
 
-import org.choongang.admin.menus.Menu;
-import org.choongang.admin.menus.MenuDetail;
-import org.choongang.commons.ExceptionProcessor;
+import lombok.RequiredArgsConstructor;
+import org.choongang.board.entities.BoardData;
+import org.choongang.board.repositories.BoardDataRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.List;
+@Controller
+@RequestMapping("/board")
+@RequiredArgsConstructor
+public class BoardController {
+    private final BoardDataRepository boardDataRepository;
 
-@Controller("adminBoardController")
-@RequestMapping("/admin/board")
-public class BoardController implements ExceptionProcessor {
+    @ResponseBody
+    @GetMapping("/test")
+    public void test() {
+        BoardData data = boardDataRepository.findById(1L).orElse(null);
+        data.setSubject("(수정)제목");
+        boardDataRepository.flush();
 
-  @ModelAttribute("menuCode")
-  public String getMenuCode() { // 주 메뉴 코드
-    return "board";
-  }
-
-  @ModelAttribute("subMenus")
-  public List<MenuDetail> getSubMenus() { // 서브 메뉴
-    return Menu.getMenus("board");
-  }
-
-  /**
-   * 게시판 목록
-   *
-   * @return
-   */
-  @GetMapping
-  public String list(Model model) {
-    commonProcess("list", model);
-
-    return "admin/board/list";
-  }
-
-  /**
-   * 게시판 등록
-   *
-   * @return
-   */
-  @GetMapping("/add")
-  public String add(Model model) {
-    commonProcess("add", model);
-
-    return "admin/board/add";
-  }
-
-  /**
-   * 게시판 등록/수정 처리
-   *
-   * @return
-   */
-  @PostMapping("/save")
-  public String save() {
-
-    return "redirect:/admin/board";
-  }
-
-  /**
-   * 게시글 관리
-   *
-   * @return
-   */
-  @GetMapping("/posts")
-  public String posts(Model model) {
-    commonProcess("posts", model);
-
-    return "admin/board/posts";
-  }
-
-  /**
-   * 공통 처리
-   *
-   * @param mode
-   * @param model
-   */
-  private void commonProcess(String mode, Model model) {
-    String pageTitle = "게시판 목록";
-    mode = StringUtils.hasText(mode) ? mode : "list";
-
-    if (mode.equals("add")) {
-      pageTitle = "게시판 등록";
-
-    } else if (mode.equals("edit")) {
-      pageTitle = "게시판 수정";
-
-    } else if (mode.equals("posts")) {
-      pageTitle = "게시글 관리";
-
+        /*
+        BoardData data = new BoardData();
+        data.setSubject("제목");
+        data.setContent("내용");
+        boardDataRepository.saveAndFlush(data);
+         */
     }
 
-    List<String> addCommonScript = new ArrayList<>();
-    List<String> addScript = new ArrayList<>();
-
-    if (mode.equals("add") || mode.equals("edit")) { // 게시판 등록 또는 수정
-      addCommonScript.add("ckeditor5/ckeditor");
-      addCommonScript.add("fileManager");
-
-      addScript.add("board/form");
+    @ResponseBody
+    @GetMapping("/test2")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    //@Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    public void test2() {
+        System.out.println("test2!!!");
     }
-
-    model.addAttribute("pageTitle", pageTitle);
-    model.addAttribute("subMenuCode", mode);
-    model.addAttribute("addCommonScript", addCommonScript);
-    model.addAttribute("addScript", addScript);
-  }
 }

@@ -11,23 +11,23 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ConfigSaveService {
-  private final ConfigsRepository repository;
+    private final ConfigsRepository repository;
 
-  public void save(String code, Object data) {
-    Configs configs = repository.findById(code).orElseGet(Configs::new);
+    public void save(String code, Object data) {
+        Configs configs = repository.findById(code).orElseGet(Configs::new);
 
-    ObjectMapper om = new ObjectMapper();
-    om.registerModule(new JavaTimeModule());
+        ObjectMapper om = new ObjectMapper();
+        om.registerModule(new JavaTimeModule());
 
-    try {
-      String jsonString = om.writeValueAsString(data);
-      configs.setData(jsonString);
-      configs.setCode(code);
+        try {
+            String jsonString = om.writeValueAsString(data);
+            configs.setData(jsonString);
+            configs.setCode(code);
 
-      repository.saveAndFlush(configs);
+            repository.saveAndFlush(configs);
 
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
-  }
 }

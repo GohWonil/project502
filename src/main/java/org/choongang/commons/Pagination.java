@@ -79,8 +79,8 @@ public class Pagination {
                 queryString = queryString.replace("?", "");
 
                 baseURL += Arrays.stream(queryString.split("&"))
-                    .filter(s -> !s.contains("page="))
-                    .collect(Collectors.joining("&"));
+                        .filter(s -> !s.contains("page="))
+                        .collect(Collectors.joining("&"));
 
                 baseURL = baseURL.length() > 1 ? baseURL += "&" : baseURL;
             }
@@ -104,10 +104,10 @@ public class Pagination {
         // 0 : 페이지 번호, 1 : 페이지 URL - ?page=페이지번호
 
 
-        return IntStream.rangeClosed(firstRangePage, lastRangePage)
-            .mapToObj(p -> new String[] { String.valueOf(p),
-                baseURL + "page=" + p})
-            .toList();
+       return IntStream.rangeClosed(firstRangePage, lastRangePage)
+                .mapToObj(p -> new String[] { String.valueOf(p),
+                        baseURL + "page=" + p})
+                .toList();
 
     }
 }

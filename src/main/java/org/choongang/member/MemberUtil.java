@@ -10,33 +10,35 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberUtil {
 
-  private final HttpSession session;
+    private final HttpSession session;
 
-  public boolean isAdmin() {
+    public boolean isAdmin() {
 
-    if (isLogin()) {
-      return getMember().getAuthorities()
-          .stream().map(Authorities::getAuthority)
-          .anyMatch(a -> a == Authority.ADMIN || a ==Authority.MANAGER);
+        if (isLogin()) {
+            return getMember().getAuthorities()
+                    .stream().map(Authorities::getAuthority)
+                    .anyMatch(a -> a == Authority.ADMIN || a == Authority.MANAGER);
+        }
+
+        return false;
     }
 
-    return false;
-  }
-  public boolean isLogin() {
-    return getMember() != null;
-  }
+    public boolean isLogin() {
 
-  public Member getMember() {
-    Member member = (Member) session.getAttribute("member");
+        return getMember() != null;
+    }
 
-    return member;
-  }
+    public Member getMember() {
+        Member member = (Member) session.getAttribute("member");
 
-  public static void clearLoginData(HttpSession session) {
-    session.removeAttribute("username");
-    session.removeAttribute("NotBlank_username");
-    session.removeAttribute("NotBlank_password");
-    session.removeAttribute("Global_error");
-  }
+        return member;
+    }
+
+    public static void clearLoginData(HttpSession session) {
+        session.removeAttribute("username");
+        session.removeAttribute("NotBlank_username");
+        session.removeAttribute("NotBlank_password");
+        session.removeAttribute("Global_error");
+    }
 
 }

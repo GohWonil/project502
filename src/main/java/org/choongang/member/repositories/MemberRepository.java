@@ -9,23 +9,22 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long>, QuerydslPredicateExecutor<Member> {
-  @EntityGraph(attributePaths = "authorities")
-  Optional<Member> findByEmail(String email);
 
-  @EntityGraph(attributePaths = "authorities")
-  Optional<Member> findByUserId(String userId);
+    @EntityGraph(attributePaths = "authorities")
+    Optional<Member> findByEmail(String email);
 
-  default boolean existsByEmail(String email){
-    QMember member = QMember.member;
+    @EntityGraph(attributePaths = "authorities")
+    Optional<Member> findByUserId(String userId);
 
-    return exists(member.email.eq(email));
-  }
+    default boolean existsByEmail(String email) {
+        QMember member = QMember.member;
 
-  default boolean existsByUserId(String userId){
-    QMember member = QMember.member;
+        return exists(member.email.eq(email));
+    }
 
-    return exists(member.userId.eq(userId));
+    default boolean existsByUserId(String userId) {
+        QMember member = QMember.member;
 
-  }
-
+        return exists(member.userId.eq(userId));
+    }
 }
