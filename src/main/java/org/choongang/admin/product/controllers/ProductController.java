@@ -7,14 +7,14 @@ import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
 import org.choongang.commons.Utils;
 import org.choongang.commons.exceptions.AlertException;
+import org.choongang.product.entities.Category;
+import org.choongang.product.service.CategoryInfoService;
+import org.choongang.product.service.CategorySaveService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,9 @@ import java.util.Objects;
 public class ProductController implements ExceptionProcessor {
 
   private final CategoryValidator categoryValidator;
+  private final CategorySaveService categorySaveService;
+  private final CategoryInfoService categoryInfoService;
+
 
   @ModelAttribute("menuCode")
   public String getMenuCode() {
@@ -82,12 +85,28 @@ public class ProductController implements ExceptionProcessor {
    * @return
    */
   @GetMapping("/category")
-  public String category(@ModelAttribute RequestCategory form, Errors errors, Model model) {
+  public String category(@ModelAttribute RequestCategory form, Model model) {
+    commonProcess("category", model);
+
+    List<Category> items = categoryInfoService.getList(true);
+    model.addAttribute("items", items);
+
+    return "admin/product/category";
+  }
+
+  /**
+   * 상품 분류 등록
+   *
+   * @param model
+   * @return
+   */
+  @PostMapping("/category")
+  public String categoryPs(@Valid RequestCategory form, Errors errors, Model model) {
     commonProcess("category", model);
 
     categoryValidator.validate(form, errors);
 
-    if (errors.hasErrors()){
+    if (errors.hasErrors()) {
       List<String> messages = errors.getFieldErrors()
           .stream()
           .map(e -> e.getCodes())
@@ -97,20 +116,35 @@ public class ProductController implements ExceptionProcessor {
       throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
     }
 
-    return "admin/product/category";
+    categorySaveService.save(form);
+
+    // 분류 추가가 완료되면 부모창 새로고침
+    model.addAttribute("script", "parent.location.reload()");
+    return "common/_execute_script";
   }
 
   /**
-   * 상품 분류 추가, 수정
+   * 분류 수정
    *
-   * @param model
    * @return
    */
-  @PostMapping("/category")
-  public String categoryPs(@Valid RequestCategory form, Errors errors, Model model) {
+  @PatchMapping("/category")
+  public String categoryEdit(@RequestParam("chk") List<Integer> chks, Model model) {
     commonProcess("category", model);
 
-    return "admin/product/category";
+
+    // 수정 완료 -> 목록 갱신
+    model.addAttribute("script", "parent.location.reload()");
+    return "common/_execute_script";
+  }
+
+  @DeleteMapping("/category")
+  public String categoryDelete(@RequestParam("chk") List<String> chks, Model model) {
+    commonProcess("category", model);
+
+    // 삭제 완료 후 -> 목록 새로고침
+    model.addAttribute("script", "parent.location.reload()");
+    return "common/_execute_script";
   }
 
   /**
