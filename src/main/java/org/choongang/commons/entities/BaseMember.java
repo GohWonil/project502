@@ -22,3 +22,4 @@ public abstract class BaseMember extends Base {
     @Column(length=40, insertable = false)
     private String modifiedBy;
 }
+//
