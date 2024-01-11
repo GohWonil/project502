@@ -122,9 +122,10 @@ public class BoardConfigInfoService {
             } else { // 통합검색 : bid + bName
                 BooleanBuilder orBuilder = new BooleanBuilder();
                 orBuilder.or(cond1)
-                    .or(cond2);
+                        .or(cond2);
                 andBuilder.and(orBuilder);
             }
+
         }
 
         /* 검색 조건 처리 E */
