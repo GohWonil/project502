@@ -12,7 +12,7 @@ public class RequestBoardConfig {
 
     private String gid = UUID.randomUUID().toString();
 
-    @NotBlank(message = "123")
+    @NotBlank
     private String bid; // 게시판 아이디
 
     @NotBlank
