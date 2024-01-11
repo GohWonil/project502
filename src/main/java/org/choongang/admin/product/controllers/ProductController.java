@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.choongang.admin.menus.Menu;
 import org.choongang.admin.menus.MenuDetail;
 import org.choongang.commons.ExceptionProcessor;
+import org.choongang.commons.Utils;
+import org.choongang.commons.exceptions.AlertException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,6 +24,8 @@ import java.util.Objects;
 @RequestMapping("/admin/product")
 @RequiredArgsConstructor
 public class ProductController implements ExceptionProcessor {
+
+  private final CategoryValidator categoryValidator;
 
   @ModelAttribute("menuCode")
   public String getMenuCode() {
@@ -77,8 +82,20 @@ public class ProductController implements ExceptionProcessor {
    * @return
    */
   @GetMapping("/category")
-  public String category(@ModelAttribute RequestCategory form, Model model) {
+  public String category(@ModelAttribute RequestCategory form, Errors errors, Model model) {
     commonProcess("category", model);
+
+    categoryValidator.validate(form, errors);
+
+    if (errors.hasErrors()){
+      List<String> messages = errors.getFieldErrors()
+          .stream()
+          .map(e -> e.getCodes())
+          .map(s -> Utils.getMessage(s[0]))
+          .toList();
+
+      throw new AlertException(messages.get(0), HttpStatus.BAD_REQUEST);
+    }
 
     return "admin/product/category";
   }
